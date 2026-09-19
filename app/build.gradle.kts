@@ -8,8 +8,8 @@ android {
         applicationId = "ssfa.sudoku.minimax"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.0.1"
+        versionCode = 2
+        versionName = "0.1.0"
     }
 
     buildTypes {
@@ -42,5 +42,5 @@ tasks.register<Copy>("exportDebugApk") {
     dependsOn("assembleDebug")
     from(layout.buildDirectory.file("outputs/apk/debug/app-debug.apk"))
     into(rootProject.layout.projectDirectory.dir("artifacts"))
-    rename { "ssfa.sudoku.minimax-0.0.1.apk" }
+    rename { "ssfa.sudoku.minimax-0.1.0.apk" }
 }

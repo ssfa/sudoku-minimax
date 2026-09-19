@@ -1,0 +1,17 @@
+[tools]
+java = "temurin-17"
+gradle = "8.13"
+
+[tasks.build]
+description = "디버그 APK 빌드"
+run = "mise exec -- ./gradlew exportDebugApk"
+
+[tasks.install]
+description = "연결된 기기에 APK 설치"
+depends = ["build"]
+run = "adb install -r app/build/outputs/apk/debug/app-debug.apk"
+
+[tasks.launch]
+description = "빌드·설치 후 앱 실행"
+depends = ["install"]
+run = "adb shell am start -W -n com.ssfa.sudoku.minimax/.MainActivity"

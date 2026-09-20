@@ -27,8 +27,19 @@ APK: `artifacts/ssfa.sudoku.minimax-0.2.5.apk`
 
 ```bash
 mise run build      # 디버그 APK
-mise run install    # 기기 설치
-mise run launch     # 실행
+mise run install    # 연결된 기기(에뮬/실기)에 APK 설치
+mise run launch     # 빌드·설치 후 앱 실행
+```
+
+### 에뮬레이터
+
+```bash
+emulator -list-avds     # 사용 가능한 AVD 목록
+emulator -avd <이름> &   # 에뮬레이터 실행
+
+# 에뮬레이터 연결 후
+mise run install
+mise run launch
 ```
 
 ## 변경 이력

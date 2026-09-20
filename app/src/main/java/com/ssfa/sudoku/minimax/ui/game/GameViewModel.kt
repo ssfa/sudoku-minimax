@@ -1,6 +1,7 @@
 package com.ssfa.sudoku.minimax.ui.game
 
 import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
-    private val prefs: SharedPreferences = application.getSharedPreferences("sudoku", Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences by lazy { getApplication<Application>().getSharedPreferences("sudoku", Context.MODE_PRIVATE) }
 
     private val _state = MutableStateFlow<GameState?>(null)
     val state: StateFlow<GameState?> = _state

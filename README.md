@@ -4,7 +4,7 @@
 
 ## 버전
 
-- **현재**: 0.1.0 (versionCode 2)
+- **현재**: 0.2.0 (versionCode 3)
 
 ## 빌드
 
@@ -12,7 +12,7 @@
 mise run build
 ```
 
-APK: `artifacts/ssfa.sudoku.minimax-0.1.0.apk`
+APK: `artifacts/ssfa.sudoku.minimax-0.2.0.apk`
 
 ## 기능
 
@@ -36,3 +36,4 @@ mise run launch     # 실행
 |------|------|
 | 0.0.1 | 프로젝트 뼈대 + 빌드 확인 |
 | 0.1.0 | 게임 화면 + 난이도 선택 + 숫자 입력 + 힌트/메모/타이머 기초 |
+| 0.2.0 | 크래시 수정 + 완성 Dialog/Confetti + 테스트 (13 tests) |

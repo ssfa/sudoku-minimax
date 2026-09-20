@@ -55,7 +55,7 @@ tasks.register<Copy>("exportDebugApk") {
     dependsOn("assembleDebug")
     from(layout.buildDirectory.file("outputs/apk/debug/app-debug.apk"))
     into(rootProject.layout.projectDirectory.dir("artifacts"))
-    rename { "ssfa.sudoku.minimax-0.2.5.apk" }
+    rename { "ssfa.sudoku.minimax-${android.defaultConfig.versionName}.apk" }
 }
 
 tasks.register<JacocoReport>("jacocoTestReport") {

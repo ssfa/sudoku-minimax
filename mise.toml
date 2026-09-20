@@ -19,4 +19,4 @@ run = "adb shell am start -W -n com.ssfa.sudoku.minimax/.MainActivity"
 
 [tasks.setup]
 description = "Android SDK 초기 환경 구성"
-run = "yes | sdkmanager --licenses 2>/dev/null; sdkmanager --install \"platform-tools\" \"platforms;android-35\" \"build-tools;35.0.0\""
+run = "yes | sdkmanager --licenses 2>/dev/null; sdkmanager --install \"platform-tools\" \"platforms;android-35\" \"build-tools;35.0.0\" \"emulator\""

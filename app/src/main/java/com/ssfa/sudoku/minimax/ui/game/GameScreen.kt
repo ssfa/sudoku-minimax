@@ -120,7 +120,7 @@ fun GameScreen(state: GameState, onCellClick: (Int, Int) -> Unit, onNumberInput:
         Spacer(modifier = Modifier.weight(1f))
 
         // Version footer
-        Text("v0.2.5", fontSize = 11.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f), modifier = Modifier.padding(bottom = 4.dp))
+        Text("v0.2.6", fontSize = 11.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f), modifier = Modifier.padding(bottom = 4.dp))
 
         // Confetti
         ConfettiOverlay(showCompleted)

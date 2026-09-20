@@ -23,6 +23,15 @@ APK: `artifacts/ssfa.sudoku.minimax-0.2.5.apk`
 - 라이트/다크/시스템 테마 수동 선택
 - APK 최적화 (R8 minify, 1.4MB)
 
+## 환경 구성
+
+```bash
+# Android SDK 설치 (macOS 기준)
+sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+```
+
+`local.properties`에 `sdk.dir`이 설정되어 있어야 합니다.
+
 ## 개발
 
 ```bash

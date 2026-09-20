@@ -1,5 +1,6 @@
 [tools]
 java = "21.0.2"
+android-sdk = "latest"
 gradle = "8.13"
 
 [tasks.build]

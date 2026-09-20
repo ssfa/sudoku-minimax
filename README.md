@@ -4,7 +4,7 @@
 
 ## 버전
 
-- **현재**: 0.2.6 (versionCode 9)
+- **현재**: 0.2.7 (versionCode 10)
 
 ## 빌드
 
@@ -12,7 +12,7 @@
 mise run build
 ```
 
-APK: `artifacts/ssfa.sudoku.minimax-0.2.5.apk`
+APK: `artifacts/ssfa.sudoku.minimax-0.2.7.apk`
 
 ## 기능
 

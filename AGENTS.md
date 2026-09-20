@@ -5,7 +5,6 @@
 - **Package**: `com.ssfa.sudoku.minimax`
 - **App ID**: `ssfa.sudoku.minimax`
 - **GitHub**: `ssfa/sudoku-minimax`
-- **최종 버전**: 0.2.5 (versionCode 8)
 
 ## 빌드
 
@@ -20,6 +19,7 @@ APK: `artifacts/ssfa.sudoku.minimax-<version>.apk`
 - SemVer + versionCode 일치. 기능은 MINOR, 레이아웃/스타일/카피/버그는 PATCH.
 - 빌드마다 마이너 버전 올리기 (versionCode도 같이).
 - 버전 3곳 동기화: `app/build.gradle.kts` (versionCode/versionName), `GameScreen.kt` (v footer), `MenuScreen.kt` (v footer).
+- **버전 올릴 때마다** README.md (현재 버전, APK 경로)·CHANGES.md (변경 내역) 갱신 필수.
 
 ## 파일 구조
 

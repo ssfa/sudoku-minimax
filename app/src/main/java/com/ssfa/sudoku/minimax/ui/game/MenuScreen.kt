@@ -56,7 +56,7 @@ fun MenuScreen(onStart: (Difficulty) -> Unit, themeMode: AppThemeMode, onThemeCh
         DifficultyButton("상 (고급)", Difficulty.HARD, MaterialTheme.colorScheme.tertiary, onStart)
 
         Spacer(modifier = Modifier.weight(1f))
-        Text("v0.2.6", fontSize = 11.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f))
+        Text("v0.2.7", fontSize = 11.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f))
     }
 }
 

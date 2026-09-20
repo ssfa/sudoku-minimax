@@ -120,7 +120,7 @@ fun GameScreen(state: GameState, onCellClick: (Int, Int) -> Unit, onNumberInput:
         Spacer(modifier = Modifier.weight(1f))
 
         // Version footer
-        Text("v0.2.6", fontSize = 11.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f), modifier = Modifier.padding(bottom = 4.dp))
+        Text("v0.2.7", fontSize = 11.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f), modifier = Modifier.padding(bottom = 4.dp))
 
         // Confetti
         ConfettiOverlay(showCompleted)
@@ -205,7 +205,9 @@ private fun SudokuBoard(state: GameState, boardSize: androidx.compose.ui.unit.Dp
 }
 
 @Composable private fun ActionButtonIcon(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, onClick: () -> Unit, color: Color) {
-    val contentColor = MaterialTheme.colorScheme.onPrimary
+    val bg = MaterialTheme.colorScheme.background
+    val isDark = bg.red * 0.299f + bg.green * 0.587f + bg.blue * 0.114f < 0.5f
+    val contentColor = if (isDark) Color.Black else Color.White
     Button(onClick = onClick, modifier = Modifier.height(56.dp).width(90.dp), shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(containerColor = color)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {

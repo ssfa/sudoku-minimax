@@ -23,10 +23,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import com.ssfa.sudoku.minimax.ui.theme.AppThemeMode
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,7 +43,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.res.painterResource
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,7 +62,7 @@ import com.ssfa.sudoku.minimax.engine.GameState
 import kotlin.random.Random
 
 @Composable
-fun GameScreen(state: GameState, onCellClick: (Int, Int) -> Unit, onNumberInput: (Int) -> Unit, onErase: () -> Unit, onHint: () -> Unit, onNote: () -> Unit, onPause: () -> Unit, onMenu: () -> Unit) {
+fun GameScreen(state: GameState, onCellClick: (Int, Int) -> Unit, onNumberInput: (Int) -> Unit, onErase: () -> Unit, onHint: () -> Unit, onNote: () -> Unit, onMenu: () -> Unit, themeMode: AppThemeMode, onThemeChange: (AppThemeMode) -> Unit) {
     var showCompleted by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.isCompleted) {
@@ -64,11 +71,28 @@ fun GameScreen(state: GameState, onCellClick: (Int, Int) -> Unit, onNumberInput:
 
     Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         Column(modifier = Modifier.fillMaxSize().padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        // Timer bar
+        // Header: title + menu
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onMenu) { Text("☰", fontSize = 20.sp) }
+            Text("스도쿠 (MiniMax M2.7)", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            IconButton(onClick = onMenu) { Icon(Icons.Filled.Menu, contentDescription = "메뉴", tint = MaterialTheme.colorScheme.onBackground) }
+        }
+
+        // Time + remaining
+        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            val remaining = state.puzzle.indices.sumOf { r ->
+                state.puzzle[r].indices.count { c -> state.puzzle[r][c] == 0 && state.userBoard[r][c] == 0 }
+            }
+            Text("${remaining}칸 남음", fontSize = 12.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.5f))
             Text(formatTime(state.elapsedSeconds), fontSize = 22.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-            IconButton(onClick = onPause) { Text(if (state.isTimerPaused) "▶" else "⏸", fontSize = 18.sp) }
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        // Theme chips
+        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+            ThemeChipInline("라이트", themeMode == AppThemeMode.LIGHT) { onThemeChange(AppThemeMode.LIGHT) }
+            ThemeChipInline("다크", themeMode == AppThemeMode.DARK) { onThemeChange(AppThemeMode.DARK) }
+            ThemeChipInline("자동", themeMode == AppThemeMode.SYSTEM) { onThemeChange(AppThemeMode.SYSTEM) }
         }
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -86,17 +110,17 @@ fun GameScreen(state: GameState, onCellClick: (Int, Int) -> Unit, onNumberInput:
             }
         }
 
-        // Action buttons
+        // Action buttons: icon + label
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp), horizontalArrangement = Arrangement.SpaceEvenly) {
-            ActionButton("⌫", onErase, MaterialTheme.colorScheme.error)
-            ActionButton("💡", onHint, MaterialTheme.colorScheme.tertiary)
-            ActionButton("📝", onNote, MaterialTheme.colorScheme.secondary)
+            ActionButtonIcon(Icons.Filled.Clear, "지우기", onErase, MaterialTheme.colorScheme.error)
+            ActionButtonIcon(Icons.Filled.Lightbulb, "힌트", onHint, MaterialTheme.colorScheme.tertiary)
+            ActionButtonIcon(Icons.Filled.Edit, "메모", onNote, MaterialTheme.colorScheme.secondary)
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
         // Version footer
-        Text("v0.2.0", fontSize = 11.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f), modifier = Modifier.padding(bottom = 4.dp))
+        Text("v0.2.5", fontSize = 11.sp, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.35f), modifier = Modifier.padding(bottom = 4.dp))
 
         // Confetti
         ConfettiOverlay(showCompleted)
@@ -152,13 +176,13 @@ private fun SudokuBoard(state: GameState, boardSize: androidx.compose.ui.unit.Dp
                             Text("$value", fontSize = 18.sp, fontWeight = if (isGiven) FontWeight.Bold else FontWeight.Normal,
                                 color = if (isGiven) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary)
                         } else if (notes != null) {
-                            Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(1.dp)) {
+                            Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize().padding(0.dp)) {
                                 for (r in 0..2) {
-                                    Row {
+                                    Row(modifier = Modifier.fillMaxWidth()) {
                                         for (c in 0..2) {
                                             val n = r * 3 + c + 1
-                                            Text(if (notes.contains(n)) "$n" else " ", fontSize = 9.sp,
-                                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                                            Text(if (notes.contains(n)) "$n" else " ", fontSize = 7.sp,
+                                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f), modifier = Modifier.weight(1f), textAlign = TextAlign.Center, lineHeight = 8.sp)
                                         }
                                     }
                                 }
@@ -180,10 +204,14 @@ private fun SudokuBoard(state: GameState, boardSize: androidx.compose.ui.unit.Dp
     }
 }
 
-@Composable private fun ActionButton(emoji: String, onClick: () -> Unit, color: Color) {
-    Button(onClick = onClick, modifier = Modifier.height(44.dp).width(80.dp), shape = RoundedCornerShape(10.dp),
+@Composable private fun ActionButtonIcon(icon: androidx.compose.ui.graphics.vector.ImageVector, label: String, onClick: () -> Unit, color: Color) {
+    val contentColor = MaterialTheme.colorScheme.onPrimary
+    Button(onClick = onClick, modifier = Modifier.height(56.dp).width(90.dp), shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(containerColor = color)) {
-        Text(emoji, fontSize = 18.sp)
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+            Icon(icon, contentDescription = label, tint = contentColor, modifier = Modifier.size(22.dp))
+            Text(label, fontSize = 10.sp, color = contentColor)
+        }
     }
 }
 
@@ -207,9 +235,23 @@ private data class ConfettiParticle(val x: Float, val y: Float, val color: Color
 @Composable private fun CompletedDialog(time: Int, onNewGame: () -> Unit) {
     AlertDialog(
         onDismissRequest = {},
-        title = { Text("🎉 축하합니다!", fontWeight = FontWeight.Bold) },
+        title = { Text("★ 完成!", fontWeight = FontWeight.Bold) },
         text = { Text("스도쿠를 완성했습니다!\n소요 시간: ${formatTime(time)}", style = MaterialTheme.typography.bodyLarge) },
         confirmButton = { Button(onClick = onNewGame) { Text("새 게임") } }
+    )
+}
+
+@Composable private fun ThemeChipInline(label: String, selected: Boolean, onClick: () -> Unit) {
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = { Text(label, fontSize = 11.sp) },
+        colors = FilterChipDefaults.filterChipColors(
+            selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
+            selectedLabelColor = MaterialTheme.colorScheme.primary
+        ),
+        border = null,
+        modifier = Modifier.height(28.dp)
     )
 }
 

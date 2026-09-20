@@ -1,4 +1,4 @@
-plugins { id("com.android.application"); id("org.jetbrains.kotlin.android"); id("org.jetbrains.kotlin.plugin.compose") }
+plugins { id("com.android.application"); id("org.jetbrains.kotlin.android"); id("org.jetbrains.kotlin.plugin.compose"); id("jacoco") }
 
 android {
     namespace = "com.ssfa.sudoku.minimax"
@@ -8,12 +8,16 @@ android {
         applicationId = "ssfa.sudoku.minimax"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.2.0"
+        versionCode = 8
+        versionName = "0.2.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = true
+            isDebuggable = true
+        }
         release {
             isMinifyEnabled = true
             proguardFiles(
@@ -36,7 +40,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.3")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
     implementation("androidx.activity:activity-compose:1.9.0")
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    implementation("androidx.compose.material:material-icons-extended:1.7.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.24")
     testImplementation("org.json:json:20230227")
@@ -50,5 +54,16 @@ tasks.register<Copy>("exportDebugApk") {
     dependsOn("assembleDebug")
     from(layout.buildDirectory.file("outputs/apk/debug/app-debug.apk"))
     into(rootProject.layout.projectDirectory.dir("artifacts"))
-    rename { "ssfa.sudoku.minimax-0.2.0.apk" }
+    rename { "ssfa.sudoku.minimax-0.2.5.apk" }
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+    val execFiles = fileTree(layout.buildDirectory) { setIncludes(listOf("**/*.ec")) }
+    executionData.from(execFiles)
+    sourceDirectories.from(files("src/main/java"))
 }

@@ -99,7 +99,17 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val newBoard = s.userBoard.map { it.copyOf() }.toTypedArray()
         newBoard[s.selectedRow][s.selectedCol] = s.solution[s.selectedRow][s.selectedCol]
         val completed = SudokuGenerator.isComplete(newBoard)
-        _state.value = s.copy(userBoard = newBoard, isCompleted = completed)
+        // Find next empty cell after hint
+        var nextRow = -1; var nextCol = -1
+        outer@ for (r in 0..8) {
+            for (c in 0..8) {
+                if (s.puzzle[r][c] == 0 && newBoard[r][c] == 0) {
+                    nextRow = r; nextCol = c
+                    break@outer
+                }
+            }
+        }
+        _state.value = s.copy(userBoard = newBoard, isCompleted = completed, selectedRow = nextRow, selectedCol = nextCol)
         saveGame()
         if (completed) timerJob?.cancel()
     }
@@ -108,6 +118,22 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         val s = _state.value ?: return
         _state.value = s.copy(isTimerPaused = !s.isTimerPaused)
         saveGame()
+    }
+
+    fun pauseTimer() {
+        val s = _state.value ?: return
+        if (!s.isTimerPaused) {
+            _state.value = s.copy(isTimerPaused = true)
+            saveGame()
+        }
+    }
+
+    fun resumeTimer() {
+        val s = _state.value ?: return
+        if (s.isTimerPaused && !s.isCompleted) {
+            _state.value = s.copy(isTimerPaused = false)
+            saveGame()
+        }
     }
 
     fun goToMenu() {

@@ -44,12 +44,12 @@ mise run launch     # 빌드·설치 후 앱 실행
 ```bash
 mise run setup                              # 처음 한 번만 (SDK + 에뮬 설치)
 
-# AVD 생성 (처음 한 번)
-sdkmanager --install "system-images;android-35;google_apis;arm64-v8a"
-avdmanager create avd -n Pixel_8 --package "system-images;android-35;google_apis;arm64-v8a"
+# AVD 생성 (처음 한 번) — 고화질 (Galaxy S26 Ultra 수준)
+sdkmanager --install "system-images;android-35;google_apis;x86_64"
+avdmanager create avd -n Pixel_8 --package "system-images;android-35;google_apis;x86_64"
 
-# 에뮬 실행
-emulator -avd Pixel_8 &
+# 에뮬 실행 (GPU 가속)
+emulator -avd Pixel_8 -gpu host &
 
 # 에뮬 연결 후
 mise run install

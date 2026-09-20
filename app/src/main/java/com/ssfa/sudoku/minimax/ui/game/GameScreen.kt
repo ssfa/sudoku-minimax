@@ -45,9 +45,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -74,7 +74,7 @@ fun GameScreen(state: GameState, onCellClick: (Int, Int) -> Unit, onNumberInput:
         // Header: title + menu
         Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
             Text("스도쿠 (MiniMax M2.7)", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-            IconButton(onClick = onMenu) { Icon(Icons.Filled.Menu, contentDescription = "메뉴", tint = MaterialTheme.colorScheme.onBackground) }
+            IconButton(onClick = onMenu) { Icon(Icons.Filled.Close, contentDescription = "종료", tint = MaterialTheme.colorScheme.onBackground) }
         }
 
         // Time + remaining
@@ -125,7 +125,7 @@ fun GameScreen(state: GameState, onCellClick: (Int, Int) -> Unit, onNumberInput:
         // Confetti
         ConfettiOverlay(showCompleted)
         // Completion dialog
-        if (showCompleted) CompletedDialog(time = state.elapsedSeconds, onNewGame = { showCompleted = false }) }
+        if (showCompleted) CompletedDialog(time = state.elapsedSeconds, onNewGame = onMenu) }
     }
 }
 

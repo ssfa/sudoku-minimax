@@ -26,8 +26,7 @@ APK: `artifacts/ssfa.sudoku.minimax-0.2.5.apk`
 ## 환경 구성
 
 ```bash
-# Android SDK 설치 (macOS 기준)
-sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+mise run setup   # Android SDK + 에뮬레이터 설치
 ```
 
 `local.properties`에 `sdk.dir`이 설정되어 있어야 합니다.
@@ -43,10 +42,16 @@ mise run launch     # 빌드·설치 후 앱 실행
 ### 에뮬레이터
 
 ```bash
-emulator -list-avds     # 사용 가능한 AVD 목록
-emulator -avd <이름> &   # 에뮬레이터 실행
+mise run setup                              # 처음 한 번만 (SDK + 에뮬 설치)
 
-# 에뮬레이터 연결 후
+# AVD 생성 (처음 한 번)
+sdkmanager --install "system-images;android-35;google_apis;arm64-v8a"
+avdmanager create avd -n Pixel_8 --package "system-images;android-35;google_apis;arm64-v8a"
+
+# 에뮬 실행
+emulator -avd Pixel_8 &
+
+# 에뮬 연결 후
 mise run install
 mise run launch
 ```

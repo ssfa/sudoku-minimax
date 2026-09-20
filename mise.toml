@@ -1,5 +1,5 @@
 [tools]
-java = "temurin-17"
+java = "21.0.2"
 gradle = "8.13"
 
 [tasks.build]
